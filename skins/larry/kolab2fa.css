@@ -1,0 +1,93 @@
+
+.propform .formbuttons {
+	margin-top: 1em;
+}
+
+.propform .explain {
+	max-width: 40em;
+	margin-top: 0.4em;
+	margin-bottom: 0.8em;
+}
+
+.propform .kolab2fa-showqr {
+	font-weight: bold;
+}
+
+.propform tr.hidden {
+	display: none;
+}
+
+table.propform thead th {
+	text-align: left;
+	padding: 6px 10px;
+}
+
+table.propform td.title {
+	vertical-align: top;
+	padding-top: 0.8em;
+}
+
+table.propform td.title > label {
+	line-height: 1.8em;
+}
+
+.propform img.qrcode {
+	min-width: 260px;
+	min-height: 260px;
+}
+
+table.authentication-factors {
+	width: 99%;
+	max-width: 60em;
+	border: 0;
+}
+
+table.authentication-factors td.name {
+	width: 60%;
+	font-weight: bold;
+}
+
+table.authentication-factors td.name:before {
+	content: "\2714";
+	display: inline-block;
+	margin-right: 1em;
+/*
+	width: 1.5em;
+	line-height: 1.5em;
+	text-align: center;
+	color: #c7e3ef;
+	background: #004458;
+	border-radius: 50%;
+*/
+}
+
+table.authentication-factors td.created {
+	width: 12em;
+	white-space: nowrap;
+}
+
+table.authentication-factors td.actions {
+	width: 8em;
+	white-space: nowrap;
+	text-align: right;
+}
+
+table.authentication-factors td.actions a.button {
+	padding: 2px 8px;
+	cursor: default;
+}
+
+.kolab2fa-highsecuritydialog {
+	display: none;
+}
+
+.ui-dialog-content .propform > label {
+	display: inline-block;
+	padding-top: 0.3em;
+	min-width: 12em;
+	font-weight: bold;
+}
+
+.ui-dialog-content .propform .verifycode {
+	width: 20em;
+}

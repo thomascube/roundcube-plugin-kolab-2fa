@@ -1,0 +1,34 @@
+<roundcube:object name="doctype" value="html5" />
+<html>
+<head>
+<title><roundcube:object name="pagetitle" /></title>
+<roundcube:include file="/includes/links.html" />
+</head>
+<body class="noscroll">
+
+<roundcube:include file="/includes/header.html" />
+
+<div id="mainscreen" class="offset">
+
+<roundcube:include file="/includes/settingstabs.html" />
+
+<div id="pluginbody" class="uibox contentbox scroller">
+    <h1 class="boxtitle"><roundcube:object name="steptitle" /></h1>
+    <div class="boxcontent propform">
+        <p class="addfactor">
+            <roundcube:object name="plugin.factoradder" />
+        </p>
+        <roundcube:object name="plugin.settingslist" class="propform authentication-factors" />
+    </div>
+</div>
+
+</div>
+
+<roundcube:object name="plugin.settingsform" class="propform" />
+
+<roundcube:object name="plugin.highsecuritydialog" class="kolab2fa-highsecuritydialog" />
+
+<roundcube:include file="/includes/footer.html" />
+
+</body>
+</html>
