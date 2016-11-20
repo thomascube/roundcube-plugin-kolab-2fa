@@ -640,7 +640,7 @@ class kolab_2fa extends rcube_plugin
 
         if ($success) {
             $this->api->output->show_message($data === false ? $this->gettext('factorremovesuccess') : $this->gettext('factorsavesuccess'), 'confirmation');
-            $this->api->output->command('plugin.save_success', array('method' => $method, 'active' => $data !== false) + $save_data);
+            $this->api->output->command('plugin.kolab_2fa_save_success', array('id' => $method, 'active' => $data !== false) + $save_data);
         }
         else if ($errors) {
             $this->api->output->show_message($this->gettext('factorsaveerror'), 'error');

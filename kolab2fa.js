@@ -274,7 +274,12 @@ window.rcmail && rcmail.addEventListener('init', function(evt) {
     });
 
     // callback for save action
-    rcmail.addEventListener('plugin.save_success', function(data) {
+    rcmail.addEventListener('plugin.kolab_2fa_save_success', function(data) {
+        // force object
+        if (rcmail.env.kolab_2fa_factors.length !== undefined) {
+          rcmail.env.kolab_2fa_factors = {};
+        }
+
         if (!data.active && rcmail.env.kolab_2fa_factors[data.id]) {
             delete rcmail.env.kolab_2fa_factors[data.id];
         }

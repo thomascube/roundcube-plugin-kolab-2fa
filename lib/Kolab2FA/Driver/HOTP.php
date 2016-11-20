@@ -58,7 +58,7 @@ class HOTP extends Base
         );
 
         // copy config options
-        $this->backend = new \Kolab2FA\OTP\HOTP();
+        $this->backend = new \OTPHP\HOTP();
         $this->backend
             ->setDigits($this->config['digits'])
             ->setDigest($this->config['digest'])
