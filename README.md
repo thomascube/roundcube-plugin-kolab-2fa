@@ -1,6 +1,9 @@
 Kolab Multi-Factor Authentication Plugin
 ========================================
 
+> This is a clone from https://git.kolab.org/diffusion/RPK/  
+> For bug reports and pull requests, please go to https://kolab.org/
+
 The plugin is designed to be a generic container for different 2nd factor 
 authentication mechanisms paired with different ways to store the related 
 data for Roundcube user accounts. Both drivers and storage backends are derived 
@@ -91,7 +94,7 @@ LDAP Storage
 Define an `organizationalunit` with DN `ou=Tokens,dc=example,dc=org` to store 
 all authentication tokens.
 
-For token records, the [[https://git.fedorahosted.org/cgit/freeipa.git/tree/install/share/70ipaotp.ldif | FreeIPA OTP schema]] 
+For token records, the [FreeIPA OTP schema](https://git.fedorahosted.org/cgit/freeipa.git/tree/install/share/70ipaotp.ldif) 
 can be used. Please install this schema in your Kolab LDAP directory.
 
 This is an example record for a TOTP token registered to user doe@example.org:
