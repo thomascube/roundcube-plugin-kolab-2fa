@@ -51,8 +51,8 @@ After placing the plugin contents into Roundcube's plugins directory, the 3rd pa
 libraries need to be installed using Composer:
 
 ```
-$ composer require "endroid/qrcode" "~1.5.0" --no-update
-$ composer require "spomky-labs/otphp" "~5.0.0" --no-update
+$ composer require "endroid/qrcode" "~1.7.0" --no-update
+$ composer require "spomky-labs/otphp" "~6.0.0" --no-update
 $ composer require "enygma/yubikey" "~3.2"
 ```
 

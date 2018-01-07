@@ -52,7 +52,7 @@ class TOTP extends Base
         );
 
         // copy config options
-        $this->backend = new \OTPHP\TOTP();
+        $this->backend = new \Kolab2FA\OTP\TOTP();
         $this->backend
             ->setDigits($this->config['digits'])
             ->setInterval($this->config['interval'])
@@ -77,8 +77,8 @@ class TOTP extends Base
 
         $this->backend->setLabel($this->username)->setSecret($secret);
 
-        // we're comparing strings
-        $code = strval($code);
+        // PHP gets a string, but we're comparing integers.
+        $code = (int)$code;
 
         // Pass a window to indicate the maximum timeslip between client (mobile
         // device) and server.

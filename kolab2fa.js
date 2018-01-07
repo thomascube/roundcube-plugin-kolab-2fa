@@ -29,7 +29,11 @@ window.rcmail && rcmail.addEventListener('init', function(evt) {
     var highsec_call_stack = [];
     var highsec_dialog;
     var factor_dialog;
-    
+
+    if (!rcmail.env.kolab_2fa_factors) {
+        rcmail.env.kolab_2fa_factors = {};
+    }
+
     /**
      * Equivalend of PHP time()
      */
@@ -274,12 +278,7 @@ window.rcmail && rcmail.addEventListener('init', function(evt) {
     });
 
     // callback for save action
-    rcmail.addEventListener('plugin.kolab_2fa_save_success', function(data) {
-        // force object
-        if (rcmail.env.kolab_2fa_factors.length !== undefined) {
-          rcmail.env.kolab_2fa_factors = {};
-        }
-
+    rcmail.addEventListener('plugin.save_success', function(data) {
         if (!data.active && rcmail.env.kolab_2fa_factors[data.id]) {
             delete rcmail.env.kolab_2fa_factors[data.id];
         }

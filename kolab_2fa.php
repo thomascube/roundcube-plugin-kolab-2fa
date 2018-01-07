@@ -459,7 +459,7 @@ class kolab_2fa extends rcube_plugin
         }
 
         $me = $this;
-        $this->api->output->set_env('kolab_2fa_factors', array_combine(
+        $factors = array_combine(
             $factors,
             array_map(function($id) use ($me, &$env_methods) {
                 $props = array('id' => $id);
@@ -473,9 +473,10 @@ class kolab_2fa extends rcube_plugin
 
                 return $props;
             }, $factors)
-        ));
+        );
 
         $this->api->output->set_env('kolab_2fa_methods', $env_methods);
+        $this->api->output->set_env('kolab_2fa_factors', !empty($factors) ? $factors : null);
 
         return html::div(array('id' => 'kolab2fapropform'), $out);
     }
@@ -640,7 +641,10 @@ class kolab_2fa extends rcube_plugin
 
         if ($success) {
             $this->api->output->show_message($data === false ? $this->gettext('factorremovesuccess') : $this->gettext('factorsavesuccess'), 'confirmation');
-            $this->api->output->command('plugin.kolab_2fa_save_success', array('id' => $method, 'active' => $data !== false) + $save_data);
+            $this->api->output->command('plugin.save_success', array(
+                    'method' => $method,
+                    'active' => $data !== false,
+                    'id'     => $driver->id) + $save_data);
         }
         else if ($errors) {
             $this->api->output->show_message($this->gettext('factorsaveerror'), 'error');
@@ -707,6 +711,7 @@ class kolab_2fa extends rcube_plugin
                     }
                 }
             }
+
             $success = $driver->verify(rcube_utils::get_input_value('_code', rcube_utils::INPUT_POST), $timestamp);
             $method = $driver->method;
         }
@@ -722,6 +727,7 @@ class kolab_2fa extends rcube_plugin
             'message' => str_replace('$method', $this->gettext($method),
                 $this->gettext($success ? 'codeverificationpassed' : 'codeverificationfailed'))
         ));
+
         $this->api->output->send();
     }
 

@@ -99,7 +99,7 @@ $config['kolab_2fa_storage_config'] = array(
 // $config['kolab_2fa_check'] = true;
 
 // timeout for 2nd factor auth submission (in seconds)
-$config['kolab_2fa_timeout'] = 60;
+$config['kolab_2fa_timeout'] = 120;
 
 // configuration parameters for TOTP (uncomment to adjust)
 $config['kolab_2fa_totp'] = array(
