@@ -51,10 +51,10 @@ function _update_readme ()
 {
 	if [[ ${DEBUG} -eq 1 ]];
 	then
-		echo ":: Prefixing >>${PATH_TO_THE_ROOT}<< with important information.
+		echo ":: Prefixing >>${PATH_TO_THE_ROOT}<< with important information."
 	fi
 
-	cat > ${PATH_TO_THE_ROOT}<<DELIM
+	cat > ${PATH_TO_THE_ROOT} <<DELIM
 IMPORTANT INFORMATION
 =====================
 
