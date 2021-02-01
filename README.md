@@ -1,3 +1,9 @@
+How to update from [cloned](https://git.kolab.org/diffusion/RPK/browse/master/plugins/kolab_2fa/) repository
+============================================================================================================
+
+* checkout [roundcubemail-plugins-kolab](https://git.kolab.org/diffusion/RPK/repository/master/)
+* 
+
 Kolab Multi-Factor Authentication Plugin
 ========================================
 
@@ -112,5 +118,3 @@ ipatokenNotBefore: 201506110211Z
 ipatokenOTPkey: 4T5CI7SOKWYQ5JTM
 ipatokenDisabled: TRUE
 ```
-
-
