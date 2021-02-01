@@ -21,7 +21,7 @@ function _cleanup_root ()
 	do
 		ITEM_NAME="${ITEM_PATH:${STRING_LENGTH_PATH_OF_THE_ROOT}}"
 
-		if [[ "${ITEM_NAME}" != "bin" ]];
+		if [[ ${ITEM_NAME} != "bin" ]];
 		then
 			if [[ ${DEBUG} -eq 1 ]];
 			then
@@ -44,17 +44,17 @@ function _copy_source_to_root ()
 		echo ":: Copy content of >>${PATH_TO_THE_PLUGIN_SOURCE}<< to >>${PATH_TO_THE_ROOT}<<"
 	fi
 
-	cp -a "${PATH_TO_THE_PLUGIN_SOURCE}" "${PATH_TO_THE_ROOT}"
+	cp -a ${PATH_TO_THE_PLUGIN_SOURCE}/* ${PATH_TO_THE_ROOT}
 }
 
 function _update_readme ()
 {
 	if [[ ${DEBUG} -eq 1 ]];
 	then
-		echo ":: Prefixing >>${PATH_TO_THE_ROOT}<< with important information."
+		echo ":: Prefixing >>${PATH_TO_THE_ROOT_README}<< with important information."
 	fi
 
-	cat > ${PATH_TO_THE_ROOT} <<DELIM
+	cat > ${PATH_TO_THE_ROOT_README} <<DELIM
 IMPORTANT INFORMATION
 =====================
 
@@ -98,16 +98,29 @@ function _update_source ()
 
 	cd "${PATH_TO_THE_SOURCE}"
 
-	git clone https://git.kolab.org/diffusion/RPK/roundcubemail-plugins-kolab.git .
+	$(git clone https://git.kolab.org/diffusion/RPK/roundcubemail-plugins-kolab.git .)
 
-	local LATEST_TAG=$(git tag | grep roundcubemail | sort -n | tail -n 1)
+	LATEST_SOURCE_TAG=$(git tag | grep roundcubemail | sort -n | tail -n 1)
+
+	if [[ ${LATEST_SOURCE_TAG} == ${LATEST_TAG} ]];
+	then
+		echo ":: No new tag available."
+		echo "   Latest source tag >>${LATEST_SOURCE_TAG}<<."
+		echo "   Is equal to latest tag >>${LATEST_TAG}<<."
+
+		echo ""
+		cd -
+
+		exit
+		echo "   Aborting"
+	fi
 
 	if [[ ${DEBUG} -eq 1 ]];
 	then
-		echo ":: Switching to latest tag >>${LATEST_TAG}<<."
+		echo ":: Switching to latest tag >>${LATEST_SOURCE_TAG}<<."
 	fi
 
-	git checkout ${LATEST_TAG}
+	git checkout ${LATEST_SOURCE_TAG}
 
 	cd -
 }
@@ -117,8 +130,9 @@ function synchronise_from_source_repository ()
 	#bo: variable declaration
 	##independent section
 	local CURRENT_WORKING_DIRECTORY=$(pwd)
-	local DEBUG=1
+	local DEBUG=0
 	local PATH_OF_THIS_FILE=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)
+	local LATEST_TAG=$(git tag | sort -n | tail -n 1)
 
 	##dependent section
 	local PATH_TO_THE_ROOT=$(cd "${PATH_OF_THIS_FILE}/../"; pwd)
@@ -135,6 +149,9 @@ function synchronise_from_source_repository ()
 	_update_source
 	_copy_source_to_root
 	_update_readme
+	echo ""
+	echo ":: Done"
+	echo "   Please create latest tag >>${LATEST_SOURCE_TAG}<<."
 	#eo: business logic
 }
 
