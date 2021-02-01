@@ -1,0 +1,25 @@
+<roundcube:include file="includes/layout.html" />
+<roundcube:include file="includes/menu.html" />
+<roundcube:include file="includes/settings-menu.html" />
+
+<h1 class="voice"><roundcube:label name="kolab_2fa.settingstitle" /></h1>
+
+<div id="layout-content" class="selected no-navbar" role="main">
+	<h2 id="aria-label-toolbar" class="voice"><roundcube:label name="arialabeltoolbar" /></h2>
+	<div class="header" role="toolbar" aria-labelledby="aria-label-toolbar">
+		<a class="button icon back-list-button" href="#back"><span class="inner"><roundcube:label name="back" /></span></a>
+		<span class="header-title"><roundcube:label name="kolab_2fa.settingstitle" /></span>
+		<div class="toolbar menu"></div>
+	</div>
+	<div class="scroller frame-content">
+		<p class="addfactor">
+			<roundcube:object name="plugin.factoradder" class="form-control" />
+		</p>
+		<roundcube:object name="plugin.settingslist" class="authentication-factors" />
+	</div>
+</div>
+
+<roundcube:object name="plugin.settingsform" class="propform" />
+<roundcube:object name="plugin.highsecuritydialog" class="kolab2fa-highsecuritydialog hidden" />
+
+<roundcube:include file="includes/footer.html" />

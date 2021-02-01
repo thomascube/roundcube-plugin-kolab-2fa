@@ -1,14 +1,16 @@
-How to update from [cloned](https://git.kolab.org/diffusion/RPK/browse/master/plugins/kolab_2fa/) repository
-============================================================================================================
-
-* checkout [roundcubemail-plugins-kolab](https://git.kolab.org/diffusion/RPK/repository/master/)
-* 
-
-Kolab Multi-Factor Authentication Plugin
-========================================
+IMPORTANT INFORMATION
+=====================
 
 > This is a clone from https://git.kolab.org/diffusion/RPK/  
 > For bug reports and pull requests, please go to https://kolab.org/
+
+How to upgrade this clone
+=========================
+
+Execute the [synchronise_with_source.sh](bin/synchronise_with_source.sh) shell script.
+
+Kolab Multi-Factor Authentication Plugin
+========================================
 
 The plugin is designed to be a generic container for different 2nd factor 
 authentication mechanisms paired with different ways to store the related 
@@ -57,8 +59,8 @@ After placing the plugin contents into Roundcube's plugins directory, the 3rd pa
 libraries need to be installed using Composer:
 
 ```
-$ composer require "endroid/qrcode" "~1.7.0" --no-update
-$ composer require "spomky-labs/otphp" "~6.0.0" --no-update
+$ composer require "endroid/qrcode" "~1.5.0" --no-update
+$ composer require "spomky-labs/otphp" "~5.0.0" --no-update
 $ composer require "enygma/yubikey" "~3.2"
 ```
 
@@ -100,7 +102,7 @@ LDAP Storage
 Define an `organizationalunit` with DN `ou=Tokens,dc=example,dc=org` to store 
 all authentication tokens.
 
-For token records, the [FreeIPA OTP schema](https://git.fedorahosted.org/cgit/freeipa.git/tree/install/share/70ipaotp.ldif) 
+For token records, the [[https://git.fedorahosted.org/cgit/freeipa.git/tree/install/share/70ipaotp.ldif | FreeIPA OTP schema]] 
 can be used. Please install this schema in your Kolab LDAP directory.
 
 This is an example record for a TOTP token registered to user doe@example.org:
@@ -118,3 +120,5 @@ ipatokenNotBefore: 201506110211Z
 ipatokenOTPkey: 4T5CI7SOKWYQ5JTM
 ipatokenDisabled: TRUE
 ```
+
+
