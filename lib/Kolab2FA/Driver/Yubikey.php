@@ -32,7 +32,7 @@ class Yubikey extends Base
     /**
      *
      */
-    public function init(array $config)
+    public function init($config)
     {
         parent::init($config);
 
@@ -89,7 +89,7 @@ class Yubikey extends Base
     /**
      * @override
      */
-    public function set($key, $value)
+    public function set($key, $value, $persistent = true)
     {
         if ($key == 'yubikeyid' && strlen($value) > 12) {
             // verify the submitted code
@@ -108,7 +108,7 @@ class Yubikey extends Base
             $value = substr($value, 0, 12);
         }
 
-        return parent::set($key, $value);
+        return parent::set($key, $value, $persistent);
     }
 
     /**
