@@ -26,6 +26,11 @@ $config['kolab_2fa_drivers'] = array('totp');
 // available backends are: 'roundcube', 'ldap', 'sql'
 $config['kolab_2fa_storage'] = 'roundcube';
 
+// should the plugin enforce MFA enrollment
+// if this is enabled then the user will be redirected to the MFA configuration
+// page and has to complete enrollement before they can use roundcube again.
+$config['kolab_2fa_enforce'] = false;
+
 // additional config options for the above storage backend
 // here an example for the LDAP backend:
 $config['kolab_2fa_storage_config'] = array(
