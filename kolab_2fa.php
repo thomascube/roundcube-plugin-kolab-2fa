@@ -68,33 +68,35 @@ class kolab_2fa extends rcube_plugin
             $this->register_action('plugin.kolab-2fa-verify', array($this, 'settings_verify'));
         }
 
-        if ( $rcmail->config->get('kolab_2fa_check', false) ) {
-            $plugin_actions = array('plugin.kolab-2fa','plugin.kolab-2fa-data', 'plugin.kolab-2fa-save', 'plugin.kolab-2fa-verify');
-            if (!($args['task'] === 'login' || ($args['task'] === 'settings' && in_array($args['action'], $plugin_actions)))) {
-                $a_host = parse_url($args['host']);
-                $hostname = $_SESSION['hostname'] = $a_host['host'] ?: $args['host'];
-                $lookup = $rcmail->plugins->exec_hook('kolab_2fa_lookup', array(
-                    'user'    => $rcmail->get_user_name(),
-                    'host'    => $hostname,
-                    'factors' => $rcmail->config->get('kolab_2fa_factors'),
-                    'check'   => $rcmail->config->get('kolab_2fa_check', true),
-                ));
-                if (isset($lookup['factors'])) {
-                    $factors = (array)$lookup['factors'];
-                }
-                // 2b. check storage if this user has 2FA enabled
-                else if ($lookup['check'] !== false && ($storage = $this->get_storage($args['user']))) {
-                    $factors = (array)$storage->enumerate();
-                }
+        $plugin_actions = array('plugin.kolab-2fa','plugin.kolab-2fa-data', 'plugin.kolab-2fa-save', 'plugin.kolab-2fa-verify');
 
-                if (count($factors) === 0) {
-                    if ($args['task'] !== 'login') {
-                    // TODO: find out if roundcube has a better way to do this and have a message shown to the user
-                    header('Location: ?_task=settings&_action=plugin.kolab-2fa' );
-                    }
+        if ( $rcmail->config->get('kolab_2fa_check', false) ) {
+            $a_host = parse_url($args['host']);
+            $hostname = $_SESSION['hostname'] = $a_host['host'] ?: $args['host'];
+            $lookup = $rcmail->plugins->exec_hook('kolab_2fa_lookup', array(
+                'user'    => $rcmail->get_user_name(),
+                'host'    => $hostname,
+                'factors' => $rcmail->config->get('kolab_2fa_factors'),
+                'check'   => $rcmail->config->get('kolab_2fa_check', true),
+            ));
+            if (isset($lookup['factors'])) {
+                $factors = (array)$lookup['factors'];
+            }
+            // 2b. check storage if this user has 2FA enabled
+            else if ($lookup['check'] !== false && ($storage = $this->get_storage($args['user']))) {
+                $factors = (array)$storage->enumerate();
+            }
+
+            if (count($factors) === 0) {
+                if (!($args['task'] === 'login' || ($args['task'] === 'settings' && in_array($args['action'], $plugin_actions)))) {
+                    $this->api->output->redirect(array('_task' => 'settings', '_action' => 'plugin.kolab-2fa'));
+                }
+                else {
+                    $this->api->output->show_message("MFA is enforced you need to have at least one 2nd factor configured", 'error');
                 }
             }
         }
+
 
         return $args;
     }
