@@ -71,7 +71,7 @@ class kolab_2fa extends rcube_plugin
         $plugin_actions = array('plugin.kolab-2fa','plugin.kolab-2fa-data', 'plugin.kolab-2fa-save', 'plugin.kolab-2fa-verify');
         $session_tasks  = array('login', 'logout');
 
-        if ( $rcmail->config->get('kolab_2fa_check', false) ) {
+        if ( $rcmail->config->get('kolab_2fa_enforce', false) ) {
             $a_host = parse_url($args['host']);
             $hostname = $_SESSION['hostname'] = $a_host['host'] ?: $args['host'];
 
