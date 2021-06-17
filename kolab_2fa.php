@@ -69,6 +69,7 @@ class kolab_2fa extends rcube_plugin
         }
 
         $plugin_actions = array('plugin.kolab-2fa','plugin.kolab-2fa-data', 'plugin.kolab-2fa-save', 'plugin.kolab-2fa-verify');
+        $session_tasks  = array('login', 'logout');
 
         if ( $rcmail->config->get('kolab_2fa_check', false) ) {
             $a_host = parse_url($args['host']);
@@ -90,7 +91,7 @@ class kolab_2fa extends rcube_plugin
 
             $factors_count = count($factors);
             if ($factors_count === 0) {
-                if (!($args['task'] === 'login')) {
+                if (!(in_array($args['task'], $session_tasks))) {
                     if (!($args['task'] === 'settings' && in_array($args['action'], $plugin_actions))) {
                         $this->api->output->redirect(array('_task' => 'settings', '_action' => 'plugin.kolab-2fa'));
                     }
