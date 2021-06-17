@@ -73,6 +73,7 @@ class kolab_2fa extends rcube_plugin
         if ( $rcmail->config->get('kolab_2fa_check', false) ) {
             $a_host = parse_url($args['host']);
             $hostname = $_SESSION['hostname'] = $a_host['host'] ?: $args['host'];
+
             $lookup = $rcmail->plugins->exec_hook('kolab_2fa_lookup', array(
                 'user'    => $rcmail->get_user_name(),
                 'host'    => $hostname,
@@ -87,12 +88,15 @@ class kolab_2fa extends rcube_plugin
                 $factors = (array)$storage->enumerate();
             }
 
-            if (count($factors) === 0) {
-                if (!($args['task'] === 'login' || ($args['task'] === 'settings' && in_array($args['action'], $plugin_actions)))) {
-                    $this->api->output->redirect(array('_task' => 'settings', '_action' => 'plugin.kolab-2fa'));
-                }
-                else {
-                    $this->api->output->show_message("MFA is enforced you need to have at least one 2nd factor configured", 'error');
+            $factors_count = count($factors);
+            if ($factors_count === 0) {
+                if (!($args['task'] === 'login')) {
+                    if (!($args['task'] === 'settings' && in_array($args['action'], $plugin_actions))) {
+                        $this->api->output->redirect(array('_task' => 'settings', '_action' => 'plugin.kolab-2fa'));
+                    }
+                    else {
+                        $this->api->output->show_message("MFA is enforced you need to have at least one 2nd factor configured. Current number of configured MFA tokens: " . $factors_count, 'error');
+                    }
                 }
             }
         }
