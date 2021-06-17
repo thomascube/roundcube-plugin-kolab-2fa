@@ -23,7 +23,7 @@
 
 class kolab_2fa extends rcube_plugin
 {
-    public $task = '(login|settings)';
+    # public $task = '(login|settings)';
 
     protected $login_verified = null;
     protected $login_factors = array();
@@ -66,6 +66,31 @@ class kolab_2fa extends rcube_plugin
             $this->register_action('plugin.kolab-2fa-data', array($this, 'settings_data'));
             $this->register_action('plugin.kolab-2fa-save', array($this, 'settings_save'));
             $this->register_action('plugin.kolab-2fa-verify', array($this, 'settings_verify'));
+        }
+        $plugin_actions = array('plugin.kolab-2fa','plugin.kolab-2fa-data', 'plugin.kolab-2fa-save', 'plugin.kolab-2fa-verify');
+        if (!($args['task'] === 'login' || ($args['task'] === 'settings' && in_array($args['action'], $plugin_actions)))) {
+          $a_host = parse_url($args['host']);
+          $hostname = $_SESSION['hostname'] = $a_host['host'] ?: $args['host'];
+          $lookup = $rcmail->plugins->exec_hook('kolab_2fa_lookup', array(
+            'user'    => $rcmail->get_user_name(),
+            'host'    => $hostname,
+            'factors' => $rcmail->config->get('kolab_2fa_factors'),
+            'check'   => $rcmail->config->get('kolab_2fa_check', true),
+          ));
+          if (isset($lookup['factors'])) {
+            $factors = (array)$lookup['factors'];
+          }
+          // 2b. check storage if this user has 2FA enabled
+          else if ($lookup['check'] !== false && ($storage = $this->get_storage($args['user']))) {
+            $factors = (array)$storage->enumerate();
+          }
+
+          if (count($factors) === 0) {
+            if ($args['task'] !== 'login') {
+              // TODO: find out if roundcube has a better way to do this and have a message shown to the user
+              header('Location: ?_task=settings&_action=plugin.kolab-2fa' );
+            }
+          }
         }
 
         return $args;
@@ -195,7 +220,7 @@ class kolab_2fa extends rcube_plugin
 
         return $args;
     }
-    
+
     /**
      * Helper method to verify the given method/code tuple
      */
