@@ -88,15 +88,31 @@ class kolab_2fa extends rcube_plugin
         // parse $host URL
         $a_host = parse_url($args['host']);
         $hostname = $_SESSION['hostname'] = $a_host['host'] ?: $args['host'];
+        $username = $args['user'];
+        $username_domain = $rcmail->config->get('username_domain');
+        if (strlen($username_domain) > 3 && !strpos($username, '@')) $username .= "@$username_domain";
+
+        // Convert username to lowercase.
+        $login_lc = $rcmail->config->get('login_lc', 2);
+        if ($login_lc) {
+            if ($login_lc == 2 || $login_lc === true) {
+                $username = mb_strtolower($username);
+            }
+            else if (strpos($username, '@')) {
+                // lowercase domain name
+                list($local, $domain) = explode('@', $username);
+                $username = $local . '@' . mb_strtolower($domain);
+            }
+        }
 
         // 1. find user record (and its prefs) before IMAP login
-        if ($user = rcube_user::query($args['user'], $hostname)) {
+        if ($user = rcube_user::query($username, $hostname)) {
             $rcmail->config->set_user_prefs($user->get_prefs());
         }
 
         // 2a. let plugins provide the list of active authentication factors
         $lookup = $rcmail->plugins->exec_hook('kolab_2fa_lookup', array(
-            'user'    => $args['user'],
+            'user'    => $username,
             'host'    => $hostname,
             'factors' => $rcmail->config->get('kolab_2fa_factors'),
             'check'   => $rcmail->config->get('kolab_2fa_check', true),
@@ -105,7 +121,7 @@ class kolab_2fa extends rcube_plugin
             $factors = (array)$lookup['factors'];
         }
         // 2b. check storage if this user has 2FA enabled
-        else if ($lookup['check'] !== false && ($storage = $this->get_storage($args['user']))) {
+        else if ($lookup['check'] !== false && ($storage = $this->get_storage($username))) {
             $factors = (array)$storage->enumerate();
         }
 
@@ -118,7 +134,7 @@ class kolab_2fa extends rcube_plugin
             $_SESSION['kolab_2fa_nonce']   = bin2hex(openssl_random_pseudo_bytes(32));
             $_SESSION['kolab_2fa_factors'] = $factors;
 
-            $_SESSION['username'] = $args['user'];
+            $_SESSION['username'] = $username;
             $_SESSION['host']     = $args['host'];
             $_SESSION['password'] = $rcmail->encrypt($args['pass']);
 
